@@ -1,0 +1,18 @@
+version: 1
+from: "infracamp/kickstart-flavor-gaia:testing"
+
+apache_fallback_resource: "/index.php"
+
+config_file:
+  template: "config.php.dist"
+  target: "config.php"
+
+
+
+command:
+  build:
+    - "composer update"
+
+  run:
+    - "scripts/start-service.sh"
+

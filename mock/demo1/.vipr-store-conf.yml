@@ -1,0 +1,23 @@
+
+
+scopes:
+  users:
+    path: "users/"
+    acl:
+      read:
+        jwt:
+          scope: user.read
+      write: deny
+
+  machines:
+    path: "machine/"
+    index: "|(?<key>[a-z0-9]+)\.yml$|"
+    acl:
+      read:
+        jwt:
+          scope: machine.read
+      write: deny
+
+
+
+

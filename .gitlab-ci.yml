@@ -1,0 +1,31 @@
+image: docker:stable
+stages:
+- test
+- deploy
+
+services:
+  - docker:dind
+
+#variables:
+#  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+- apk update && apk add bash curl
+
+latest:
+  stage: test
+  script:
+  - ./kickstart.sh --ci-build
+  - curl --fail -X POST --data-binary @.kick.yml "http://helene.talpa.io/deploy/$CI_REGISTRY_IMAGE?secret=$RAMBO_DEPLOY_KEY"
+  only:
+  - master
+
+stable:
+  stage: deploy
+  script:
+  - ./kickstart.sh --ci-build
+  - curl "http://rambo.talpa.io/deploy/webservice/data-emitter?key=$RAMBO_DEPLOY_KEY"
+  when: on_success
+  only:
+  - tags
+
